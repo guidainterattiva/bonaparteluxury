@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Bonaparte Luxury Apartments — Guida Ospiti</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white: #FFFFFF;
+  --off-white: #F9F7F4;
+  --cream: #F2EDE5;
+  --warm-sand: #EDE6D8;
+  --stone: #DDD5C4;
+  --terra: #9B6B4A;
+  --terra-light: #B8875E;
+  --terra-pale: #F0E4D7;
+  --sage: #6B7C62;
+  --sea: #4A6B7A;
+  --text: #1E1A15;
+  --text-mid: #5C5248;
+  --text-soft: #9A9088;
+  --line: #E4DDD0;
+  --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--text); max-width: 430px; margin: 0 auto; overflow: hidden; }
+
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
+
+/* LANGUAGE TOGGLE */
+.lang-toggle { position: fixed; top: 66px; right: 14px; display: flex; align-items: center; background: var(--white); border-radius: 20px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 2px 10px rgba(0,0,0,0.08); z-index: 90; }
+.lang-opt { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500; letter-spacing: 1px; padding: 5px 9px; border: none; background: none; cursor: pointer; color: var(--text-soft); transition: all .2s; }
+.lang-opt.active { background: var(--terra); color: white; border-radius: 20px; }
+
+/* TOP NAV */
+.top-nav { background: var(--white); border-bottom: 1px solid var(--line); padding: 0 4px; display: flex; align-items: center; gap: 0; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; height: 56px; }
+.top-nav::-webkit-scrollbar { display: none; }
+.nav-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 10px; border: none; background: none; cursor: pointer; border-radius: 10px; white-space: nowrap; flex-shrink: 0; position: relative; }
+.nav-tab.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 18px; height: 2px; background: var(--terra); border-radius: 2px; }
+.tab-icon svg { width: 20px; height: 20px; stroke: var(--text-soft); stroke-width: 1.5; fill: none; transition: stroke .2s; }
+.nav-tab.active .tab-icon svg { stroke: var(--terra); }
+.tab-label { font-size: 9px; font-weight: 500; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-soft); transition: color .2s; }
+.nav-tab.active .tab-label { color: var(--terra); }
+
+/* SCREENS */
+.screen { display: none; flex: 1; overflow-y: auto; flex-direction: column; -webkit-overflow-scrolling: touch; }
+.screen.active { display: flex; animation: fadeUp .25s ease; }
+@keyframes fadeUp { from { opacity:0; transform: translateY(5px) } to { opacity:1; transform: none } }
+
+/* BILINGUAL */
+body.lang-en .it-text { display: none !important; }
+body.lang-it .en-text { display: none !important; }
+
+/* HOME */
+.home-hero { background: var(--white); padding: 36px 28px 28px; text-align: center; border-bottom: 1px solid var(--line); position: relative; }
+.home-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--terra-light), transparent); }
+.logo-wrap { margin-bottom: 16px; display: flex; justify-content: center; }
+.logo-wrap img { height: 62px; width: auto; object-fit: contain; }
+.logo-fallback { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; letter-spacing: 2px; color: var(--terra); }
+.home-eyebrow { font-size: 9px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; color: var(--terra); margin-bottom: 8px; }
+.home-dear { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: var(--text-soft); margin-bottom: 2px; }
+.home-welcome { font-family: 'Cormorant Garamond', serif; font-size: 58px; font-weight: 300; line-height: 1; color: var(--text); margin-bottom: 10px; font-style: italic; }
+.home-ornament { display: flex; align-items: center; gap: 10px; justify-content: center; margin: 12px 0 10px; }
+.home-ornament::before, .home-ornament::after { content: ''; flex: 1; max-width: 44px; height: 1px; background: var(--terra-light); opacity: .5; }
+.home-ornament span { color: var(--terra); font-size: 9px; letter-spacing: 3px; }
+.home-property { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--text-mid); font-weight: 400; }
+
+/* GRID */
+.home-grid { padding: 22px 18px 40px; }
+.grid-eyebrow { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-soft); margin-bottom: 14px; text-align: center; }
+.icon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.icon-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 6px 12px; cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s; }
+.icon-btn:active { transform: scale(0.95); box-shadow: 0 4px 14px rgba(155,107,74,.15); border-color: var(--terra-light); }
+.btn-icon svg { width: 24px; height: 24px; stroke: var(--text-mid); stroke-width: 1.4; fill: none; }
+.btn-label { font-size: 9.5px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-mid); text-align: center; line-height: 1.3; }
+
+/* WELCOME CARD */
+.welcome-wrap { padding: 8px 18px 40px; }
+.welcome-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 20px 16px; position: relative; overflow: hidden; }
+.welcome-card::before { content: '\201C'; font-family: 'Cormorant Garamond', serif; font-size: 90px; line-height: 1; color: var(--terra); opacity: .1; position: absolute; top: -6px; left: 10px; pointer-events: none; }
+.welcome-text { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; line-height: 1.85; color: var(--text-mid); padding-top: 10px; margin-bottom: 16px; }
+.welcome-author { display: flex; align-items: center; gap: 12px; padding-top: 13px; border-top: 1px solid var(--line); }
+.author-mono { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--terra-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.author-mono svg { width: 14px; height: 14px; stroke: var(--terra); stroke-width: 1.5; fill: none; }
+.author-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.author-role { font-size: 11px; color: var(--text-soft); }
+
+/* PAGE HEADER */
+.page-header { background: var(--white); padding: 26px 22px 20px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0; }
+.page-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--terra-light), transparent); }
+.page-eyebrow { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--terra); margin-bottom: 4px; font-weight: 400; }
+.page-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--text); line-height: 1.1; }
+.page-body { padding: 16px 16px 60px; }
+
+/* CARD */
+.card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 9px; }
+.card-label { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--terra); margin-bottom: 11px; font-weight: 500; }
+.card p { font-size: 14px; line-height: 1.78; color: var(--text-mid); }
+.card strong { color: var(--text); font-weight: 500; }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.info-row:last-child { border-bottom: none; padding-bottom: 0; }
+.info-label { font-size: 12px; color: var(--text-soft); }
+.info-value { font-size: 13px; font-weight: 500; color: var(--text); text-align: right; max-width: 60%; }
+
+/* WIFI */
+.wifi-card { background: var(--text); border-radius: var(--radius); padding: 24px 20px; margin-bottom: 9px; text-align: center; position: relative; overflow: hidden; }
+.wifi-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, rgba(155,107,74,.25), transparent 60%); }
+.wifi-ico { margin-bottom: 16px; position: relative; z-index: 1; }
+.wifi-ico svg { width: 34px; height: 34px; stroke: var(--terra-light); stroke-width: 1.3; fill: none; }
+.wifi-field { margin-bottom: 8px; position: relative; z-index: 1; }
+.wifi-field-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 2px; }
+.wifi-field-val { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: white; letter-spacing: 1px; }
+.copy-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--terra); border: none; border-radius: 100px; color: white; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; padding: 9px 20px; cursor: pointer; margin-top: 8px; position: relative; z-index: 1; transition: opacity .2s; }
+.copy-btn:active { opacity: .75; }
+.copy-btn svg { width: 12px; height: 12px; stroke: white; stroke-width: 2; fill: none; }
+
+/* RULES */
+.rule-item { display: flex; gap: 13px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.rule-item:last-child { border-bottom: none; padding-bottom: 0; }
+.rule-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--terra); line-height: 1; flex-shrink: 0; width: 22px; text-align: right; margin-top: -1px; }
+.rule-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.rule-desc { font-size: 13px; line-height: 1.65; color: var(--text-mid); }
+
+/* SPACES */
+.space-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 9px; }
+.space-header { display: flex; align-items: center; gap: 11px; margin-bottom: 9px; padding-bottom: 9px; border-bottom: 1px solid var(--line); }
+.space-icon svg { width: 20px; height: 20px; stroke: var(--terra); stroke-width: 1.4; fill: none; }
+.space-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 400; color: var(--text); }
+.space-desc { font-size: 13px; line-height: 1.7; color: var(--text-mid); margin-bottom: 9px; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { background: var(--cream); border-radius: 100px; padding: 4px 10px; font-size: 11px; color: var(--text-mid); }
+
+/* PLACES */
+.place-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 9px; display: flex; gap: 13px; }
+.place-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--terra); flex-shrink: 0; margin-top: 7px; }
+.place-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 400; color: var(--text); margin-bottom: 3px; }
+.place-desc { font-size: 13px; line-height: 1.65; color: var(--text-mid); margin-bottom: 6px; }
+.place-dist { font-size: 10px; color: var(--terra); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+
+/* RESTAURANTS */
+.resto-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 9px; }
+.resto-band { height: 6px; background: linear-gradient(90deg, var(--terra-pale), var(--terra-light), var(--terra-pale)); }
+.resto-body { padding: 14px 16px 14px; }
+.resto-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 1px; }
+.resto-type { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--terra); margin-bottom: 7px; }
+.resto-desc { font-size: 13px; line-height: 1.65; color: var(--text-mid); margin-bottom: 11px; }
+.resto-footer { display: flex; align-items: center; justify-content: space-between; }
+.guide-btn { display: inline-flex; align-items: center; gap: 5px; background: var(--terra); color: white; border: none; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 13px; cursor: pointer; transition: opacity .2s; text-decoration: none; }
+.guide-btn:active { opacity: .75; }
+.guide-btn svg { width: 10px; height: 10px; stroke: white; stroke-width: 2; fill: none; }
+
+/* SUPERMARKET */
+.market-card { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 9px; }
+.market-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--sage); margin-bottom: 8px; font-weight: 500; }
+
+/* SERVICES */
+.service-row { display: flex; align-items: flex-start; gap: 13px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.service-row:last-child { border-bottom: none; padding-bottom: 0; }
+.service-icon { flex-shrink: 0; margin-top: 2px; }
+.service-icon svg { width: 18px; height: 18px; stroke: var(--terra); stroke-width: 1.5; fill: none; }
+.service-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.service-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+
+/* EMERGENCY */
+.sos-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 9px; display: flex; align-items: center; gap: 13px; }
+.sos-icon { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sos-icon svg { width: 20px; height: 20px; fill: none; stroke-width: 1.5; }
+.sos-info { flex: 1; }
+.sos-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.sos-desc { font-size: 11px; color: var(--text-soft); line-height: 1.4; }
+.call-btn { display: flex; align-items: center; gap: 5px; background: var(--text); color: white; border: none; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; padding: 7px 12px; cursor: pointer; text-decoration: none; transition: opacity .2s; white-space: nowrap; }
+.call-btn.terra { background: var(--terra); }
+.call-btn:active { opacity: .75; }
+.call-btn svg { width: 11px; height: 11px; stroke: white; stroke-width: 2; fill: none; }
+
+/* INFO BOX */
+.info-box { background: var(--terra-pale); border: 1px solid rgba(155,107,74,.2); border-radius: var(--radius); padding: 14px; margin-bottom: 9px; }
+.info-box-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--terra); margin-bottom: 6px; font-weight: 500; }
+.info-box p { font-size: 13px; line-height: 1.7; color: var(--text-mid); }
+.info-box strong { color: var(--text); font-weight: 500; }
+
+/* CONTACT BAR */
+.contact-bar { background: var(--text); border-radius: var(--radius); padding: 16px 16px; margin-bottom: 9px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
+.contact-bar::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 50%, rgba(155,107,74,.2), transparent 55%); }
+.contact-bar-text { position: relative; z-index: 1; }
+.contact-bar-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 2px; }
+.contact-bar-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: white; font-weight: 300; }
+.contact-bar-btn { position: relative; z-index: 1; background: var(--terra); border: none; border-radius: 100px; color: white; font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 14px; cursor: pointer; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: opacity .2s; }
+.contact-bar-btn svg { width: 11px; height: 11px; stroke: white; stroke-width: 2; fill: none; }
+.contact-bar-btn:active { opacity: .75; }
+
+/* STEPS */
+.step-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.step-item:last-child { border-bottom: none; padding-bottom: 0; }
+.step-num { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--terra); line-height: 1; flex-shrink: 0; width: 24px; text-align: right; margin-top: -3px; }
+.step-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.step-desc { font-size: 13px; line-height: 1.65; color: var(--text-mid); }
+</style>
+</head>
+<body class="lang-it">
+<div class="app">
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <button class="nav-tab active" onclick="showScreen('home',this)">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span class="tab-label">Home</span>
+    </button>
+    <button class="nav-tab" onclick="showScreen('checkin',this)">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></span>
+      <span class="tab-label">Check-in</span>
+    </button>
+    <button class="nav-tab" onclick="showScreen('wifi',this)">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg></span>
+      <span class="tab-label">WiFi</span>
+    </button>
+    <button class="nav-tab" onclick="showScreen('regole',this)">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+      <span class="tab-label"><span class="it-text">Regole</span><span class="en-text">Rules</span></span>
+    </button>
+    <button class="nav-tab" onclick="showScreen('visitare',this)">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+      <span class="tab-label"><span class="it-text">Luoghi</span><span class="en-text">Places</span></span>
+    </button>
+    <button class="nav-tab" onclick="showScreen('ristoranti',this)">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
+      <span class="tab-label"><span class="it-text">Ristoranti</span><span class="en-text">Eat &amp; Drink</span></span>
+    </button>
+    <button class="nav-tab" onclick="showScreen('emergenza',this)">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+      <span class="tab-label">SOS</span>
+    </button>
+  </nav>
+
+  <div class="lang-toggle">
+    <button class="lang-opt active" id="btn-it" onclick="setLang('it')">IT</button>
+    <button class="lang-opt" id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+
+  <!-- ═══ HOME ═══ -->
+  <div id="home" class="screen active">
+    <div class="home-hero">
+      <div class="logo-wrap">
+        <img src="https://ik.imagekit.io/2gkrpnbbol/IMG-20260424-WA0014.jpg" alt="Bonaparte Luxury Apartments" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="logo-fallback" style="display:none">Bonaparte</div>
+      </div>
+      <div class="home-eyebrow">Peschiera del Garda · Lago di Garda</div>
+      <div class="home-welcome">
+        <span class="it-text">Benvenuti!</span>
+        <span class="en-text">Welcome!</span>
+      </div>
+      <div class="home-ornament"><span>✦ ✦ ✦</span></div>
+      <div class="home-property">Bonaparte Luxury Apartments</div>
+    </div>
+    <div class="home-grid">
+      <div class="grid-eyebrow">
+        <span class="it-text">La tua guida completa</span>
+        <span class="en-text">Your complete guide</span>
+      </div>
+      <div class="icon-grid">
+        <button class="icon-btn" onclick="goTo('checkin',1)">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></span>
+          <span class="btn-label">Check-in</span>
+        </button>
+        <button class="icon-btn" onclick="goTo('wifi',2)">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="btn-label">WiFi</span>
+        </button>
+        <button class="icon-btn" onclick="goTo('regole',3)">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+          <span class="btn-label"><span class="it-text">Regole</span><span class="en-text">Rules</span></span>
+        </button>
+        <button class="icon-btn" onclick="goTo('visitare',4)">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <span class="btn-label"><span class="it-text">Da Visitare</span><span class="en-text">Places</span></span>
+        </button>
+        <button class="icon-btn" onclick="goTo('ristoranti',5)">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
+          <span class="btn-label"><span class="it-text">Ristoranti</span><span class="en-text">Restaurants</span></span>
+        </button>
+        <button class="icon-btn" onclick="goTo('emergenza',6)">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+          <span class="btn-label"><span class="it-text">Emergenza</span><span class="en-text">Emergency</span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CHECK-IN ═══ -->
+  <div id="checkin" class="screen">
+    <div class="page-header">
+      <div class="page-eyebrow it-text">Arrivo</div>
+      <div class="page-eyebrow en-text">Arrival</div>
+      <div class="page-title">Check-in &amp; <span class="it-text">Accesso</span><span class="en-text">Access</span></div>
+    </div>
+    <div class="page-body">
+
+      <div class="card">
+        <div class="card-label it-text">Orari &amp; Info</div>
+        <div class="card-label en-text">Times &amp; Info</div>
+        <div class="info-row">
+          <span class="info-label">Check-in</span>
+          <span class="info-value it-text">dalle 15:00 alle 23:00</span>
+          <span class="info-value en-text">3:00 PM – 11:00 PM</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Check-out</span>
+          <span class="info-value it-text">entro le 10:00</span>
+          <span class="info-value en-text">by 10:00 AM</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label it-text">Indirizzo</span>
+          <span class="info-label en-text">Address</span>
+          <span class="info-value">Via Beato Andrea 1, Peschiera del Garda (VR)</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label it-text">Parcheggio</div>
+        <div class="card-label en-text">Parking</div>
+        <p class="it-text">Potete parcheggiare la vostra auto negli <strong>spazi blu in Piazza Ferdinando di Savoia</strong>. Proseguendo lungo Via XX Maggio per circa 200 metri si raggiunge direttamente la piazza.<br><br>All&#39;interno dell&#39;appartamento troverete un <strong>pass parcheggio</strong>: vi chiediamo gentilmente di esporlo in modo ben visibile sul cruscotto. In questo modo il parcheggio sar&#224; <strong>gratuito</strong>.</p>
+        <p class="en-text">You can park your car in the <strong>blue spaces in Piazza Ferdinando di Savoia</strong>. Continue along Via XX Maggio for about 200 metres to reach the square directly.<br><br>Inside the apartment you will find a <strong>parking pass</strong>: please display it clearly on the dashboard. This makes parking <strong>free of charge</strong>.</p>
+      </div>
+
+      <a href="https://maps.app.goo.gl/M8Y32B2xMJVjz5xB7" target="_blank" class="guide-btn" style="width:100%;justify-content:center;border-radius:12px;padding:12px;font-size:10px;letter-spacing:1.5px;text-decoration:none;">
+        <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:white;stroke-width:2;fill:none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span class="it-text">Indicazioni stradali</span>
+        <span class="en-text">Get directions</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ WIFI ═══ -->
+  <div id="wifi" class="screen">
+    <div class="page-header">
+      <div class="page-eyebrow it-text">Connettivit&#224;</div>
+      <div class="page-eyebrow en-text">Connectivity</div>
+      <div class="page-title">WiFi</div>
+    </div>
+    <div class="page-body">
+      <div class="wifi-card">
+        <div class="wifi-ico"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg></div>
+        <div class="wifi-field">
+          <div class="wifi-field-lbl it-text">Nome Rete</div>
+          <div class="wifi-field-lbl en-text">Network Name</div>
+          <div class="wifi-field-val">Bonaparte</div>
+        </div>
+        <div class="wifi-field">
+          <div class="wifi-field-lbl">Password</div>
+          <div class="wifi-field-val" id="pwd">Bon2026!</div>
+        </div>
+        <button class="copy-btn" onclick="copyPwd(this)">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          <span class="it-text">Copia Password</span>
+          <span class="en-text">Copy Password</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ REGOLE ═══ -->
+  <div id="regole" class="screen">
+    <div class="page-header">
+      <div class="page-eyebrow it-text">Da Rispettare</div>
+      <div class="page-eyebrow en-text">Please observe</div>
+      <div class="page-title"><span class="it-text">Regole della Casa</span><span class="en-text">House Rules</span></div>
+    </div>
+    <div class="page-body">
+      <div class="card">
+        <!-- Rule 1 -->
+        <div class="rule-item">
+          <div class="rule-num">1</div>
+          <div>
+            <div class="rule-title it-text">Fumo</div>
+            <div class="rule-title en-text">Smoking</div>
+            <div class="rule-desc it-text">Il fumo &#232; <strong>vietato ovunque</strong>, sia negli spazi interni che in quelli esterni.</div>
+            <div class="rule-desc en-text">Smoking is <strong>strictly prohibited</strong> everywhere, both indoors and outdoors.</div>
+          </div>
+        </div>
+        <!-- Rule 2 -->
+        <div class="rule-item">
+          <div class="rule-num">2</div>
+          <div>
+            <div class="rule-title it-text">Animali Domestici</div>
+            <div class="rule-title en-text">Pets</div>
+            <div class="rule-desc it-text">Gli animali domestici <strong>non sono ammessi</strong> in appartamento.</div>
+            <div class="rule-desc en-text">Pets are <strong>not allowed</strong> in the apartment.</div>
+          </div>
+        </div>
+        <!-- Rule 3 -->
+        <div class="rule-item">
+          <div class="rule-num">3</div>
+          <div>
+            <div class="rule-title it-text">Raccolta Differenziata</div>
+            <div class="rule-title en-text">Waste Sorting</div>
+            <div class="rule-desc it-text">Il Comune di Peschiera del Garda richiede il rispetto della raccolta differenziata. In cucina, sotto il lavello, troverete i contenitori dedicati. Per conferire i rifiuti, scendete al <strong>piano interrato</strong> (pulsante T in ascensore). Usciti, troverete una porta sulla sinistra: entrate e dirigetevi verso la <strong>sesta porta a destra</strong>.<br><br><span style="color:#4caf50;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Plastica e Metalli</strong> → sacchi trasparenti → bidone grande verde (PLASTICA)<br><span style="color:#e53935;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Secco</strong> → sacchi trasparenti → bidone rosso (SECCO)<br><span style="color:#1a5c1a;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Umido</strong> → sacchetti biodegradabili → bidoncino piccolo verde scuro<br><span style="color:#1565c0;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Vetro</strong> → sciacquare prima → bidoncino piccolo blu scuro<br>&#128196; <strong>Carta e Cartone</strong> → sacchetti carta o scatole → grande contenitore carta</div>
+            <div class="rule-desc en-text">The Municipality of Peschiera del Garda requires waste sorting. Under the kitchen sink you will find dedicated containers. To dispose of waste, go to the <strong>basement floor</strong> (press T in the lift). Once out, there is a door on the left: enter and head to the <strong>sixth door on the right</strong>.<br><br><span style="color:#4caf50;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Plastics &amp; Metals</strong> → transparent bags → large green bin (PLASTICA)<br><span style="color:#e53935;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Dry waste</strong> → transparent bags → red bin (SECCO)<br><span style="color:#1a5c1a;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Wet/Organic</strong> → biodegradable bags → small dark green bin<br><span style="color:#1565c0;font-size:1.4em;line-height:1;vertical-align:middle">&#9679;</span> <strong>Glass</strong> → rinse first → small dark blue bin<br>&#128196; <strong>Paper &amp; Cardboard</strong> → paper bags or boxes → large paper container</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DA VISITARE ═══ -->
+  <div id="visitare" class="screen">
+    <div class="page-header">
+      <div class="page-eyebrow it-text">I Consigli di Stephanie</div>
+      <div class="page-eyebrow en-text">Stephanie&#39;s Picks</div>
+      <div class="page-title it-text">Luoghi da Vedere</div>
+      <div class="page-title en-text">Places to Visit</div>
+    </div>
+    <div class="page-body">
+
+      <div class="place-card">
+        <div class="place-dot"></div>
+        <div style="flex:1">
+          <div class="place-name it-text">Battello del Lago di Garda</div>
+          <div class="place-name en-text">Lake Garda Ferry</div>
+          <p class="place-desc it-text">Il modo ideale per scoprire le affascinanti localit&#224; del Lago di Garda: <strong>Sirmione, Desenzano, Lazise e Bardolino</strong>. Il porto di Peschiera del Garda &#232; comodissimo da raggiungere a piedi.</p>
+          <p class="place-desc en-text">The ideal way to discover the charming towns of Lake Garda: <strong>Sirmione, Desenzano, Lazise and Bardolino</strong>. The port of Peschiera del Garda is just a short walk away.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+            <div class="place-dist it-text">5 min a piedi · Porto</div>
+            <div class="place-dist en-text">5 min walk · Harbour</div>
+            <a href="https://maps.app.goo.gl/ELEjUD9yp7kUUgUS6" target="_blank" class="guide-btn"><span class="it-text">Portami qui</span><span class="en-text">Guide me here</span> <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-card">
+        <div class="place-dot"></div>
+        <div style="flex:1">
+          <div class="place-name">Gardaland</div>
+          <p class="place-desc it-text">Il parco divertimenti <strong>n&#176;1 in Italia</strong>, facilmente raggiungibile dalla struttura. Dalla stazione ferroviaria (15 min a piedi) c&#39;&#232; una <strong>navetta gratuita</strong> che collega direttamente al parco.<br><br><strong>Navetta stazione &#8594; Gardaland:</strong> servizio continuo dalle 9:15 alle 11:30, corse aggiuntive 12:00, 12:30, 13:00.<br><strong>Navetta Gardaland &#8594; stazione:</strong> dalle 14:30 alle 16:00 ogni 30 min, dalle 16:30 fino alla chiusura (min. 20 passeggeri).</p>
+          <p class="place-desc en-text">Italy&#39;s <strong>number one theme park</strong>, easily reachable from the property. From the train station (15 min walk) a <strong>free shuttle</strong> connects directly to the park.<br><br><strong>Shuttle station &#8594; Gardaland:</strong> continuous service 9:15–11:30 AM, extra trips at 12:00, 12:30, 1:00 PM.<br><strong>Shuttle Gardaland &#8594; station:</strong> every 30 min 2:30–4:00 PM, continuous from 4:30 PM until park close (min. 20 passengers).</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+            <div class="place-dist it-text">15 min a piedi dall&#39;appartamento alla stazione</div>
+            <div class="place-dist en-text">15 min walk from apt to station</div>
+            <a href="https://www.google.com/maps/search/Gardaland+Castelnuovo+del+Garda" target="_blank" class="guide-btn"><span class="it-text">Portami qui</span><span class="en-text">Guide me here</span> <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-card">
+        <div class="place-dot"></div>
+        <div style="flex:1">
+          <div class="place-name it-text">Ciclabile del Mincio</div>
+          <div class="place-name en-text">Mincio Cycle Path</div>
+          <p class="place-desc it-text">Uno dei percorsi pi&#249; belli e accessibili della zona. La pista parte vicino al centro, lungo il fiume Mincio all&#39;uscita della zona della fortezza. Quasi completamente <strong>pianeggiante e separata dal traffico</strong>, immersa nel verde. Ideale per famiglie.</p>
+          <p class="place-desc en-text">One of the most beautiful and accessible routes in the area. The path starts near the centre, along the Mincio river at the exit of the fortress area. Almost entirely <strong>flat and traffic-free</strong>, surrounded by greenery. Ideal for families.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+            <div class="place-dist it-text">Partenza vicino al centro</div>
+            <div class="place-dist en-text">Starts near town centre</div>
+            <a href="https://www.google.com/maps/search/Ciclabile+Mincio+Peschiera+del+Garda" target="_blank" class="guide-btn"><span class="it-text">Portami qui</span><span class="en-text">Guide me here</span> <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="place-card">
+        <div class="place-dot"></div>
+        <div style="flex:1">
+          <div class="place-name it-text">Tourism Peschiera Infopoint</div>
+          <div class="place-name en-text">Tourism Peschiera Infopoint</div>
+          <p class="place-desc it-text">L&#39;ufficio turistico ufficiale di Peschiera del Garda. Personale <strong>multilingue</strong> a disposizione per informazioni su servizi, attivit&#224; e attrazioni del territorio.</p>
+          <p class="place-desc en-text">The official tourist office of Peschiera del Garda. <strong>Multilingual staff</strong> available to provide information on local services, activities and attractions.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+            <div class="place-dist it-text">3 min a piedi</div>
+            <div class="place-dist en-text">3 min walk</div>
+            <a href="https://www.google.com/maps/search/Tourism+Peschiera+Infopoint" target="_blank" class="guide-btn"><span class="it-text">Portami qui</span><span class="en-text">Guide me here</span> <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ RISTORANTI ═══ -->
+  <div id="ristoranti" class="screen">
+    <div class="page-header">
+      <div class="page-eyebrow it-text">Consigli dell&#39;host</div>
+      <div class="page-eyebrow en-text">Host&#39;s favourites</div>
+      <div class="page-title it-text">Dove Mangiare</div>
+      <div class="page-title en-text">Where to Eat</div>
+    </div>
+    <div class="page-body">
+
+      <div class="resto-card">
+        <div class="resto-band"></div>
+        <div class="resto-body">
+          <div class="resto-name">L&#39;Osteria</div>
+          <div class="resto-type it-text">Cucina Veneta Tradizionale · Via Felice Cavallotti 7</div>
+          <div class="resto-type en-text">Traditional Venetian · Via Felice Cavallotti 7</div>
+          <p class="resto-desc it-text">Un locale accogliente dove assaporare la vera cucina veneta, con piatti tipici come il <strong>luccio alla gardesana</strong>, il baccal&#224; e la polenta. Atmosfera autentica con attenzione alle materie prime locali.</p>
+          <p class="resto-desc en-text">A welcoming venue for authentic Venetian cuisine, with classic dishes such as <strong>luccio alla gardesana</strong>, salt cod and polenta. Genuine atmosphere with a focus on local produce.</p>
+          <div class="resto-footer">
+            <div class="tag-row"><span class="tag">€</span><span class="tag it-text">2 min a piedi</span><span class="tag en-text">2 min walk</span></div>
+            <a href="https://www.google.com/maps/search/L+Osteria+Via+Felice+Cavallotti+Peschiera+del+Garda" target="_blank" class="guide-btn">
+              <span class="it-text">Portami qui</span><span class="en-text">Guide me here</span>
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="resto-card">
+        <div class="resto-band"></div>
+        <div class="resto-body">
+          <div class="resto-name">Trattoria al Combattente</div>
+          <div class="resto-type it-text">Pesce di Lago · Strada Bergamini 60</div>
+          <div class="resto-type en-text">Lake Fish · Strada Bergamini 60</div>
+          <p class="resto-desc it-text">Un locale semplice e autentico, famoso per il suo <strong>pesce di lago preparato secondo la tradizione</strong>, proprio come una volta.</p>
+          <p class="resto-desc en-text">A simple and authentic venue, famous for its <strong>lake fish prepared the traditional way</strong>, just like in the old days.</p>
+          <div class="resto-footer">
+            <div class="tag-row"><span class="tag">€€</span><span class="tag it-text">7 min in auto</span><span class="tag en-text">7 min by car</span></div>
+            <a href="https://www.google.com/maps/search/Trattoria+al+Combattente+Peschiera+del+Garda" target="_blank" class="guide-btn">
+              <span class="it-text">Portami qui</span><span class="en-text">Guide me here</span>
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="resto-card">
+        <div class="resto-band"></div>
+        <div class="resto-body">
+          <div class="resto-name">Trattoria Bella Italia</div>
+          <div class="resto-type it-text">Specialit&#224; Carne · Via Bella Italia 4</div>
+          <div class="resto-type en-text">Grilled Meat · Via Bella Italia 4</div>
+          <p class="resto-desc it-text">Conosciuta per le sue <strong>specialit&#224; di carne alla griglia</strong>, preparate con cura e attenzione alla qualit&#224; delle materie prime.</p>
+          <p class="resto-desc en-text">Known for its <strong>grilled meat specialities</strong>, prepared with care and a focus on quality ingredients.</p>
+          <div class="resto-footer">
+            <div class="tag-row"><span class="tag">€€</span><span class="tag it-text">7 min in auto</span><span class="tag en-text">7 min by car</span></div>
+            <a href="https://maps.app.goo.gl/4i1vbUobx1NEnt1YA" target="_blank" class="guide-btn">
+              <span class="it-text">Portami qui</span><span class="en-text">Guide me here</span>
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="market-card">
+        <div class="market-label it-text">&#9749; Colazione &amp; Brunch</div>
+        <div class="market-label en-text">&#9749; Breakfast &amp; Brunch</div>
+        <p style="font-size:13px;line-height:1.7;color:var(--text-mid)">
+          <span class="it-text"><strong>Arilicbakery by Torta della Nonna</strong> si trova proprio di fronte alla struttura, dall&#39;altro lato della strada. Pasticceria artigianale curata e genuina, perfetta per iniziare la giornata con gusto. All&#39;interno troverete anche dei <strong>buoni sconto</strong> dedicati!</span>
+          <span class="en-text"><strong>Arilicbakery by Torta della Nonna</strong> is right across the street from the property. Artisan pastries, carefully prepared — perfect for a great start to the day. You&#39;ll also find <strong>discount vouchers</strong> inside the apartment!</span>
+        </p>
+      </div>
+
+      <div class="market-card">
+        <div class="market-label it-text">&#128717; Alimentari &amp; Supermercati</div>
+        <div class="market-label en-text">&#128717; Groceries &amp; Supermarkets</div>
+        <p style="font-size:13px;line-height:1.75;color:var(--text-mid)">
+          <span class="it-text"><strong>Alimentari Broglia</strong> — a soli 1 minuto a piedi. Prodotti tradizionali e generi di prima necessit&#224;.<br><strong>Lidl e Conad</strong> — circa 1 km dalla struttura.<br><strong>Penny, Migross, Aldi, Famila, Eurospar</strong> — circa 3 km.</span>
+          <span class="en-text"><strong>Alimentari Broglia</strong> — just 1 minute on foot. Traditional products and everyday essentials.<br><strong>Lidl and Conad</strong> — about 1 km from the property.<br><strong>Penny, Migross, Aldi, Famila, Eurospar</strong> — about 3 km away.</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ EMERGENZA ═══ -->
+  <div id="emergenza" class="screen">
+    <div class="page-header">
+      <div class="page-eyebrow it-text">Numeri Utili</div>
+      <div class="page-eyebrow en-text">Useful Numbers</div>
+      <div class="page-title it-text">Emergenze</div>
+      <div class="page-title en-text">Emergencies</div>
+    </div>
+    <div class="page-body">
+
+      <div class="sos-card">
+        <div class="sos-icon"><svg viewBox="0 0 24 24" style="stroke:#E74C3C"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="sos-info">
+          <div class="sos-name it-text">Pronto Soccorso</div>
+          <div class="sos-name en-text">Emergency Room</div>
+          <div class="sos-desc it-text">Ospedale P. Pederzoli · 4 min in auto</div>
+          <div class="sos-desc en-text">Ospedale P. Pederzoli · 4 min by car</div>
+        </div>
+        <a href="tel:118" class="call-btn"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.5a16 16 0 006.29 6.29l1.24-1.26a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>118</a>
+      </div>
+
+      <div class="sos-card">
+        <div class="sos-icon"><svg viewBox="0 0 24 24" style="stroke:#3498DB"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="sos-info">
+          <div class="sos-name">Carabinieri</div>
+          <div class="sos-desc it-text">Pronto intervento</div>
+          <div class="sos-desc en-text">Emergency response</div>
+        </div>
+        <a href="tel:112" class="call-btn"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.5a16 16 0 006.29 6.29l1.24-1.26a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>112</a>
+      </div>
+
+      <div class="sos-card">
+        <div class="sos-icon"><svg viewBox="0 0 24 24" style="stroke:#E67E22"><path d="M8.56 2.9A7 7 0 0119 9v4l3 3v1H2v-1l3-3V9a7 7 0 014.56-6.1M12 22a2 2 0 002-2h-4a2 2 0 002 2z"/></svg></div>
+        <div class="sos-info">
+          <div class="sos-name it-text">Vigili del Fuoco</div>
+          <div class="sos-name en-text">Fire Brigade</div>
+          <div class="sos-desc it-text">Incendi · Allagamenti</div>
+          <div class="sos-desc en-text">Fires · Floods</div>
+        </div>
+        <a href="tel:115" class="call-btn"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.5a16 16 0 006.29 6.29l1.24-1.26a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>115</a>
+      </div>
+
+      <div class="contact-bar">
+        <div class="contact-bar-text">
+          <div class="contact-bar-lbl">Host — Stephanie</div>
+          <div class="contact-bar-name">393 121 0316</div>
+        </div>
+        <a href="tel:+393931210316" class="contact-bar-btn">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.5a16 16 0 006.29 6.29l1.24-1.26a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <span class="it-text">Chiama ora</span>
+          <span class="en-text">Call now</span>
+        </a>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-label it-text">&#9889; Quadro Elettrico</div>
+        <div class="info-box-label en-text">&#9889; Electrical Panel</div>
+        <p class="it-text">Ogni appartamento dispone di un <strong>quadro elettrico interno</strong>. Ulteriori quadri si trovano al <strong>piano interrato</strong> (ascensore, tasto T): uscendo trovate i quadri di fronte a voi, oppure attraversando la porta sulla sinistra, altri quadri sulla destra. I nomi sui contatori corrispondono ai rispettivi appartamenti.</p>
+        <p class="en-text">Each apartment has its own <strong>internal electrical panel</strong>. Additional panels are on the <strong>basement floor</strong> (lift, press T): exit and the panels are directly in front of you, or through the door on the left, more panels are on the right. The names on the meters correspond to the respective apartments.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showScreen(id, tabEl) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  if (tabEl) {
+    tabEl.classList.add('active');
+    tabEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+  document.querySelector('.screen.active').scrollTop = 0;
+}
+
+function goTo(id, idx) {
+  var tabs = document.querySelectorAll('.nav-tab');
+  showScreen(id, tabs[idx] || null);
+}
+
+function setLang(lang) {
+  document.body.className = 'lang-' + lang;
+  document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+}
+
+function copyPwd(btn) {
+  var pwd = document.getElementById('pwd').textContent;
+  navigator.clipboard.writeText(pwd).then(function() {
+    var origHTML = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" stroke="white" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Copiata!';
+    setTimeout(function() { btn.innerHTML = origHTML; }, 2000);
+  }).catch(function() { alert('Password: ' + pwd); });
+}
+</script>
+</body>
+</html>
